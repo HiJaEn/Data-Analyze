@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 """
 data = np.arange(10)
 plt.plot(data)
@@ -48,6 +49,7 @@ ax.add_patch(rect)
 ax.add_patch(circ)
 ax.add_patch(pgon)
 """
+"""
 from datetime import datetime
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
@@ -72,5 +74,56 @@ ax.set_ylim([600, 1800])
 ax.set_title('Important dates in the 2008-2009 financial crisis')
 plt.savefig('figpath.png',dpi=400,bbox_inches = 'tight')
 plt.rc('figure',figsize=(0,1))
+"""
+"""
+df = pd.DataFrame(np.random.randn(10,4).cumsum(0),columns = ['A','B','C','D'],index = np.arange(0,100,10))
+df.plot()
+"""
+"""
+fig,axes = plt.subplots(2,1)
+data = pd.Series(np.random.rand(16),index = list('abcdefghijklmnop'))
+data.plot.bar(ax = axes[0], color = 'y',alpha = 0.7)
+data.plot.barh(ax = axes[1],color = 'k',alpha =0.7)
+"""
+"""
+df = pd.DataFrame(abs(np.random.randn(6,4)),index = ['one','two','three','four','five','six'],columns = pd.Index(['A','B','C','D'],name = 'Genus'))
+df.plot.barh(stacked = True ,alpha = 0.5)
+"""
+"""
+tips = pd.read_csv('tips.csv')
+party_counts = pd.crosstab(tips['day'],tips['size'])#使用crosstab组成表格
+print(party_counts)
+party_counts = party_counts.loc[:,2:5]
+party_pcts = party_counts.div(party_counts.sum(1),axis=0)
+print(party_pcts)
+party_pcts.plot.bar()
+"""
+"""
+tips = pd.read_csv('tips.csv')
+tips['tip_pct'] = tips['tip']/(tips['total_bill']-tips['tip'])
+print(tips)
+#sns.barplot(x = 'tip_pct',y = 'day',hue = 'time' ,data = tips ,orient = 'h')
+sns.set(style = 'whitegrid')
+#tips['tip_pct'].plot.hist(bins = 50)
+tips['tip_pct'].plot.density()
+"""
+"""
+comp1 = np.random.normal(0,1,size = 200)
+comp2 = np.random.normal(10,2,size = 200)
+values = pd.Series(np.concatenate([comp1,comp2]))
+sns.distplot(values,bins=100,color='b')
+"""
+macro = pd.read_csv('macrodata.csv')
+data = macro[['cpi', 'm1', 'tbilrate', 'unemp']]
+trans_data = np.log(data).diff().dropna()
+print(trans_data[-5:])
+sns.regplot('m1', 'unemp', data=trans_data)
+plt.title('Changes in log %s versus log %s' % ('m1', 'unemp'))
+sns.pairplot(trans_data,diag_kind = 'kde',plot_kws = {'alpha':0.3})
+
+
+
+
+
 
 plt.show()
